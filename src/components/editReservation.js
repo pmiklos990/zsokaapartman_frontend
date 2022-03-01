@@ -27,8 +27,8 @@ export default class EditReservation extends Component {
         console.log('component did mount, state now: ', this.state);
         console.log("type of start: ", typeof(this.state.end));
         const id= window.location.href.split("/").pop();
-        console.log('https://zsokaapartman-backend.herokuapp.com/'+ id);
-        axios.get('https://zsokaapartman-backend.herokuapp.com/'+ id)
+        console.log('https://zsokaapartman-backend.herokuapp.com/reservation/'+ id);
+        axios.get('https://zsokaapartman-backend.herokuapp.com/reservation/'+ id)
             .then(response => {
                 this.setState({
                     description: response.data.description,
