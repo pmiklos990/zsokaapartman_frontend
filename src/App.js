@@ -10,8 +10,8 @@ import CalendarView from "./components/calendar";
 
 import logo from "./logo.svg";
 
-class App extends Component {
-  render() {
+const App = () => {
+ 
     return (
       <BrowserRouter>
         <div className="container">
@@ -46,6 +46,6 @@ class App extends Component {
       </BrowserRouter>
     );
   }
-}
+
 
 export default App;

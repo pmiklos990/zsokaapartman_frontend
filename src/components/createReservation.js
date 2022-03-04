@@ -1,103 +1,86 @@
-import React, {Component } from "react";
+import React, {useState } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 import "react-datepicker/dist/react-datepicker.css";
 
-export default class CreateReservation extends Component {
+const CreateReservation = () => {
+    const [title, setTitle] = useState();
+    const [description, setDescription] = useState();
+    const [start, setStart] = useState();
+    const [end, setEnd] = useState();
 
-    constructor (props) {
-        super(props);
+    let navigate = useNavigate(); 
 
-        this.onChangeReservationDescription = this.onChangeReservationDescription.bind(this);
-        this.onChangeReservationName = this.onChangeReservationName.bind(this);
-        this.handleStartDateChange = this.handleStartDateChange.bind(this);
-        this.handleEndDateChange = this.handleEndDateChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
-      
-        this.state = {
-            title: '',
-            description: '',
-            start: '',
-            end: '',
-        }
-    }
-    
-
-    onChangeReservationDescription(e) {
-        this.setState({
-            description: e.target.value
-        });
-    }
-
-    
-    onChangeReservationName(e) {
-        this.setState({
-            title: e.target.value
-        });
-    }
-
-    handleStartDateChange(date) {
+    const handleStartDateChange = (date) => {
         console.log("Date start: ", date)
         date.setHours(14, 0, 0, 0);
-        console.log("Date start: ", date)
-        this.setState({
-            start: date
-        });
+        console.log("Date start: ", date);
+        setStart(date);
+        
       }
 
-      handleEndDateChange(date) {
+     const  handleEndDateChange = (date) => {
         date.setHours(10, 0, 0, 0);
-        this.setState({
-            end: date
-        });
+        setEnd(date);
       }
 
-    onSubmit(e) {
+    const onSubmit = (e) => {
         e.preventDefault();
         
         console.log(`Form submitted:`);
-        console.log(`Reservation Description: ${this.state.description}`);
-        console.log(`Reservation name: ${this.state.title}`);
-        console.log(`Reservation from: ${this.state.start}`);
-        console.log(`Reservation to: ${this.state.end}`);
+        console.log(`Reservation Description: ${description}`);
+        console.log(`Reservation name: ${title}`);
+        console.log(`Reservation from: ${start}`);
+        console.log(`Reservation to: ${end}`);
 
         const newReservation = {
-            description: this.state.description,
-            title: this.state.title,
-            start: this.state.start,
-            end: this.state.end,
+            description: description,
+            title: title,
+            start: start,
+            end: end,
         }
 
         axios.post('https://zsokaapartman-backend.herokuapp.com/reservation/add', newReservation)
-            .then(res => console.log(res.data));
-        
-        this.setState({
-            description: '',
-            title: '',
-            start: '',
-            end: '',
-        })
+            .then(res => {
+
+                
+                
+                console.log("response succes");
+
+                toast.success("YSikeres foglalás!")
+            
+                setTimeout(() => navigate('/'), 1500);
+               
+                
+            
+            }).catch(err => {
+                console.log(err);
+                toast.success("Foglalás nem sikerült!", {duration: 1000})
+                        
+             });
+
+           
+            
     }
 
-  
-
-
-
-    render () {
-        return (
+    return (
             <div style={{marginTop: 10}}>
             <h3>Új foglalás</h3>
-            <form onSubmit={this.onSubmit}>
+            <form onSubmit={onSubmit}>
 
                 <div className="form-group">
                     <label>Cím: </label>
                     <input 
                             type="text" 
                             className="form-control"
-                            value={this.state.title}
-                            onChange={this.onChangeReservationName}
+                            value={title}
+                            onChange={(e) => (setTitle(e.target.value))}
                             />
                 </div>
 
@@ -105,8 +88,8 @@ export default class CreateReservation extends Component {
                     <label>Megjegyzés: </label>
                     <input  type="text"
                             className="form-control"
-                            value={this.state.description}
-                            onChange={this.onChangeReservationDescription}
+                            value={description}
+                            onChange={(e) => (setDescription(e.target.value))}
                             />
                 </div>
                
@@ -114,18 +97,18 @@ export default class CreateReservation extends Component {
                 <div className="form-group">
                     <label>Mikortól: </label>
                     <DatePicker
-                    selected={this.state.start}
-                    onChange={this.handleStartDateChange}
-                    dateFormat="yyyy-MM-dd"
+                        selected={start}
+                        onChange={handleStartDateChange}
+                        dateFormat="yyyy-MM-dd"
                     />
                 </div>
 
                 <div className="form-group">
                     <label>Meddig: </label>
                     <DatePicker
-                    selected={this.state.end}
-                    onChange={this.handleEndDateChange}
-                    dateFormat="yyyy-MM-dd"
+                        selected={end}
+                        onChange={handleEndDateChange}
+                        dateFormat="yyyy-MM-dd"
                     />
                 </div>
                 
@@ -134,11 +117,15 @@ export default class CreateReservation extends Component {
 
                 <div className="form-group">
                     <input type="submit" value="Foglalás mentése" className="btn btn-primary" />
+                    
                 </div>
                 
             </form>
+            <ToastContainer />
         </div>
         )
 
-    }
+    
 }
+
+export default CreateReservation;
