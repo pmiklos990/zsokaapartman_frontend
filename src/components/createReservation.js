@@ -53,7 +53,7 @@ const CreateReservation = () => {
                 
                 console.log("response succes");
 
-                toast.success("YSikeres foglalás!")
+                toast.success("Sikeres foglalás!", {duration: 1000})
             
                 setTimeout(() => navigate('/'), 1500);
                

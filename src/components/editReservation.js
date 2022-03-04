@@ -1,121 +1,105 @@
-import React, { Component } from 'react';
+import React, {useEffect, useState } from "react";
 import axios from 'axios';
 import DatePicker from "react-datepicker";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-export default class EditReservation extends Component {
-
-    constructor(props) {
-        super(props);
-
-        this.onChangeReservationDescription = this.onChangeReservationDescription.bind(this);
-        this.onChangeReservationTitle = this.onChangeReservationTitle.bind(this);
-        this.handleStartDateChange = this.handleStartDateChange.bind(this);
-        this.handleEndDateChange = this.handleEndDateChange.bind(this);
-        this.deleteButton = this.deleteButton.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+const  EditReservation = () => {
 
 
-        this.state = {
-            description: '',
-            title: '',
-            start: '',
-            end: ''
-        }
-    }
+    let navigate = useNavigate(); 
+    const [title, setTitle] = useState();
+    const [description, setDescription] = useState();
+    const [start, setStart] = useState();
+    const [end, setEnd] = useState();
 
-    componentDidMount() {
-        console.log('component did mount, state now: ', this.state);
-        console.log("type of start: ", typeof(this.state.end));
+    useEffect (()=>{
+
         const id= window.location.href.split("/").pop();
         console.log('https://zsokaapartman-backend.herokuapp.com/reservation/'+ id);
         axios.get('https://zsokaapartman-backend.herokuapp.com/reservation/'+ id)
             .then(response => {
-                this.setState({
-                    description: response.data.description,
-                    title: response.data.title,
-                    start: response.data.start,
-                    end: response.data.end
-                }) 
-                console.log('component did mount and state was setting from database, state now: ', this.state);  
-                console.log("type of start: ", typeof(this.state.end));
+                setTitle(response.data.title);
+                setDescription(response.data.description);
+                setStart(response.data.start);
+                setEnd(response.data.end)
+
             })
             .catch(function (error) {
                 console.log(error);
             })
-    }
 
-    deleteButton(e) {
+    },[]);
+
+ 
+    const deleteButton = (e) => {
         const id= window.location.href.split("/").pop();
         axios.post('https://zsokaapartman-backend.herokuapp.com/reservation/delete/'+id, id)
-            .then(res => console.log(res.data));
+            .then(res => {
+                toast.success("Foglalás törölve", {duration: 1000})
+            
+                setTimeout(() => navigate('/reservationlist'), 1500);
+                
+            } );
         
-    }
-
-    onChangeReservationTitle(e) {
-        this.setState({
-            title: e.target.value
-        });
-    }
-
-    onChangeReservationDescription(e) {
-        this.setState({
-            description: e.target.value
-        });
     }
 
     
 
    
 
-    handleStartDateChange(date) {
+    const handleStartDateChange = (date) => {
     
         date.setHours(13, 0, 0, 0);
-        this.setState({
-            start: date
-        });
+        setStart(date);
+   
       }
 
-      handleEndDateChange(date) {
+      const handleEndDateChange = (date) => {
         date.setHours(10, 0, 0, 0);
-        this.setState({
-            end: date
-        });
+        setEnd(date);
+        
       }
 
     
 
     
 
-    onSubmit(e) {
+    const onSubmit = (e) => {
         e.preventDefault();
         
         const updatedReservation = {
-            description: this.state.description,
-            title: this.state.title,
-            start: this.state.start,
-            end: this.state.end,
+            description: description,
+            title: title,
+            start: start,
+            end: end,
         }
         console.log("updatedReservation: ", updatedReservation);
         const id= window.location.href.split("/").pop();
         axios.post('https://zsokaapartman-backend.herokuapp.com/reservation/update/'+id, updatedReservation)
-            .then(res => console.log(res.data));
+            .then(res => {
+                toast.success("Foglalás módosítva", {duration: 1000})
+            
+                setTimeout(() => navigate('/reservationlist'), 1500);
+            });
         
        
     }
 
     
 
-    render() {
+    
         return (
             <div>
                 <h3 align="center">Módosítás</h3>
-                <form onSubmit={this.onSubmit}>
+                <form onSubmit={onSubmit}>
                     <div className="form-group"> 
                         <label>Name: </label>
                         <input  type="text"
                                 className="form-control"
-                                value={this.state.title}
-                                onChange={this.onChangeReservationTitle}
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
                                 />
                     </div>
                     <div className="form-group">
@@ -123,15 +107,15 @@ export default class EditReservation extends Component {
                         <input 
                                 type="text" 
                                 className="form-control"
-                                value={this.state.description}
-                                onChange={this.onChangeReservationDescription}
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
                                 />
                     </div>
                     <div className="form-group">
                     <label>Mikortól: </label>
                     <DatePicker
-                        selected={Date.parse(this.state.start)}
-                        onChange={this.handleStartDateChange}
+                        selected={Date.parse(start)}
+                        onChange={handleStartDateChange}
                         dateFormat="yyyy/MM/dd"
                     />
                 </div>
@@ -139,8 +123,8 @@ export default class EditReservation extends Component {
                 <div className="form-group">
                     <label>Meddig: </label>
                     <DatePicker
-                    selected={Date.parse(this.state.end)}
-                    onChange={this.handleEndDateChange}
+                    selected={Date.parse(end)}
+                    onChange={handleEndDateChange}
                     dateFormat="yyyy/MM/dd"
                     />
                 </div>
@@ -153,11 +137,14 @@ export default class EditReservation extends Component {
                     <br />
 
                     <div className="form-group">
-                        <input type="button" value="Törlés" onClick={this.deleteButton} className="btn btn-secondary" />
+                        <input type="button" value="Törlés" onClick={deleteButton} className="btn btn-secondary" />
                     </div>
                 </form>
+                <ToastContainer />
                 
             </div>
         )
-    }
+    
 }
+
+export default EditReservation;

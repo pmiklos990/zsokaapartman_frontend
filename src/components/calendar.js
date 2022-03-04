@@ -22,14 +22,12 @@ const CalendarView = () => {
             });
 
            
-    });
+    }, []);
 
 
         
         return (
-            <div>
-                <h3>Naptár</h3>
-                
+            <div>                         
                 <FullCalendar
                     plugins={[ dayGridPlugin ]}
                     initialView="dayGridMonth"

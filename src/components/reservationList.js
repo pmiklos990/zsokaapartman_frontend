@@ -1,50 +1,38 @@
-import React, {Component} from "react";
-import { Link } from 'react-router-dom';
+import React, {useState, useEffect} from "react";
 import axios from 'axios';
-import Moment from 'react-moment';
 
 
-const Reservation = props => (
-    <tr>
-        <td>{props.reservation.title}</td>
-        <td> <Moment format="YYYY-MM-DD">{props.reservation.start}</Moment></td>
-        <td><Moment format="YYYY-MM-DD">{props.reservation.end}</Moment></td>
-        <td>
-            <Link to={"/edit/"+props.reservation._id}>Módosítás</Link>
-        </td>
-    </tr>
-)
+import Reservation from "./reservation";
 
 
-export default class ReservationList extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {reservations: []};
-    }
 
-    componentDidMount() {
-        
+
+const ReservationList = () => {
+
+    const [reservations, setReservations] = useState([]);
+  
+
+    useEffect(() => {
         axios.get('https://zsokaapartman-backend.herokuapp.com/reservation/')
             .then(response => {
-                this.setState({ reservations: response.data });
+                setReservations(response.data)
+                //this.setState({ reservations: response.data });
                 console.log("response: ", response.data);
-                console.log("state: ", this.state.reservations)
+                console.log("state: ", reservations)
             })
             .catch(function (error){
                 console.log(error);
             });
+    }, []) ;
 
-           
-    }
-
-    reservationList() {
-        return this.state.reservations.map(function(currentReservation, i){
+    const reservationList = () => {
+        return reservations.map(function(currentReservation, i){
             return <Reservation reservation={currentReservation} key={i} />;
         })
     }
 
-    render () {
+   
         return (
             <div>
             <h3>Foglalások</h3>
@@ -57,11 +45,11 @@ export default class ReservationList extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    { this.reservationList() }
+                    { reservationList() }
                 </tbody>
             </table>
         </div>
-        )
-    }
+        );
+     };
 
-}
+    export default ReservationList;
