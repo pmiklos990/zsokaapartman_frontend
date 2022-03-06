@@ -75,13 +75,13 @@ const CreateReservation = () => {
             <form onSubmit={onSubmit}>
 
                 <div className="form-group">
-                    <label>Cím: </label>
-                    <input 
-                            type="text" 
-                            className="form-control"
-                            value={title}
-                            onChange={(e) => (setTitle(e.target.value))}
-                            />
+                    <label>Kategória: </label>
+                        <select  className="form-control" onChange={(e) => (setTitle(e.target.value))}>
+                            <option value="">Válassz kategóriát</option>
+                            <option value="Nem foglalható">Nem foglalható</option>
+                            <option value="Foglalt / Reserviert">Foglalt</option>
+                        </select> 
+                   
                 </div>
 
                 <div className="form-group"> 

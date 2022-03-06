@@ -39,7 +39,8 @@ const ReservationList = () => {
             <table className="table table-striped" style={{ marginTop: 20 }} >
                 <thead>
                     <tr>
-                        <th>Foglalás</th>
+                        <th>Kategória</th>
+                        <th>Megjegyzés</th>
                         <th>Mikortól</th>
                         <th>Meddig</th>
                     </tr>

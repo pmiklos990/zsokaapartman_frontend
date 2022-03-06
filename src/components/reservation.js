@@ -5,6 +5,7 @@ import Moment from 'react-moment';
 const Reservation = (props) => (
     <tr>
         <td>{props.reservation.title}</td>
+        <td>{props.reservation.description}</td>
         <td> <Moment format="YYYY-MM-DD">{props.reservation.start}</Moment></td>
         <td><Moment format="YYYY-MM-DD">{props.reservation.end}</Moment></td>
         <td>

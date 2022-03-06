@@ -14,7 +14,8 @@ const CalendarView = () => {
             .then(response => {
                 setReservations(response.data);
                 console.log("response: ", response.data);
-                console.log("state: ", reservations)
+                console.log("state: ", reservations);
+                
             })
             .catch(function (error){
                 console.log(error);
@@ -32,6 +33,8 @@ const CalendarView = () => {
                     plugins={[ dayGridPlugin ]}
                     initialView="dayGridMonth"
                     events={reservations}
+                    allDaySlot={false}
+                  
                 />
             
             </div>
