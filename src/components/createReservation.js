@@ -78,8 +78,9 @@ const CreateReservation = () => {
                     <label>Kategória: </label>
                         <select  className="form-control" onChange={(e) => (setTitle(e.target.value))}>
                             <option value="">Válassz kategóriát</option>
-                            <option value="Nem foglalható">Nem foglalható</option>
-                            <option value="Foglalt / Reserviert">Foglalt</option>
+                            <option value="privát használat / private use ">privát használat</option>
+                            <option value="foglalás / reservation">Foglalás</option>
+                            <option value="egyéb / other">Egyéb</option>
                         </select> 
                    
                 </div>

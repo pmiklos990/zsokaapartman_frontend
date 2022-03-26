@@ -95,12 +95,13 @@ const  EditReservation = () => {
                 <h3 align="center">Módosítás</h3>
                 <form onSubmit={onSubmit}>
                     <div className="form-group"> 
-                        <label>Name: </label>
-                        <input  type="text"
-                                className="form-control"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                />
+                    <label>Kategória: </label>
+                        <select  className="form-control" onChange={(e) => (setTitle(e.target.value))}>
+                            <option value="">Válassz kategóriát</option>
+                            <option value="privát használat / private use ">privát használat</option>
+                            <option value="foglalás / reservation">Foglalás</option>
+                            <option value="egyéb / other">Egyéb</option>
+                        </select> 
                     </div>
                     <div className="form-group">
                         <label>Megjegyzés: </label>
