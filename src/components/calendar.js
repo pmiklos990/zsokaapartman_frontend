@@ -34,6 +34,7 @@ const CalendarView = () => {
                     initialView="dayGridMonth"
                     events={reservations}
                     allDaySlot={false}
+                    
                   
                 />
             
